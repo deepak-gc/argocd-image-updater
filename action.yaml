@@ -26,13 +26,14 @@ runs:
       run: |
         
         if [[ -n "$UPDATE-DEPLOYMENT-LIST" ]]; then
-            echo "In IF"
+            echo "Adding UPDATE-DEPLOYMENT-LIST to file: $UPDATE-DEPLOYMENT-LIST"
+            echo "$UPDATE-DEPLOYMENT-LIST" > update-deployment-list.env
             while IFS= read -r line; do
               echo "In Loop ${line}"
               if [[ -n "$line" ]]; then
                 echo "Update folder: ${line}/**/image.yaml"
               fi
-            done <<< "$SECRETS_FROM_FILES"
+            done <<< "update-deployment-list.env"
         fi
 
         echo "Done"
