@@ -25,13 +25,15 @@ runs:
               if [[ -n "$line" ]]; then
                  
                  if [ "$line" != "**" ] && [ ! -f "deploy/overlays/staging/$line/image.yaml" ]; then
-                    echo "deploy/overlays/staging/${line}/image.yaml doesn't exists."
+                    echo "Error: Failed to update deploy/overlays/staging/${line}/image.yaml, file doesn't exists."
                     break
                  fi
                  
-                echo "Update folder: deploy/overlays/staging/${line}/image.yaml"
+                echo "Updating folder: deploy/overlays/staging/${line}/image.yaml"
                 sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
                 cat deploy/overlays/staging/${line}/image.yaml | grep "image:"
+                
+                echo "\n"
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
