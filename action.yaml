@@ -1,0 +1,38 @@
+name: 'Update image tag'
+description: 'Update image tag'
+inputs:
+  image-tag:
+    description: 'Image tag'
+    default: ${{ github.sha }}
+    required: false
+  update-deployment-list:
+    description: 'List of deployment where image tag should be updated'
+    default: |
+      deploy/overlays/staging
+    required: false
+outputs:
+  image-tag:
+    description: 'Image tag'
+    value: ${{ steps.image-metadata.outputs.image-tag }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: image-metadata
+      name: Extract image metadata
+      env:
+        UPDATE-DEPLOYMENT-LIST: ${{ inputs.update-deployment-list }}
+        IMAGE_TAG: ${{ inputs.image-tag }}
+      run: |
+        
+        if [[ -n "$UPDATE-DEPLOYMENT-LIST" ]]; then
+            while IFS= read -r line; do
+              if [[ -n "$line" ]]; then
+                echo "Update folder: ${line}/**/image.yaml"
+              fi
+            done <<< "$SECRETS_FROM_FILES"
+        fi
+
+      
+      shell: bash
+      
