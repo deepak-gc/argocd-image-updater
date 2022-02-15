@@ -24,7 +24,7 @@ runs:
             while IFS= read -r line; do
               if [[ -n "$line" ]]; then
                  
-                 if [ ! -f "deploy/overlays/staging/$line/image.yaml" ] && [ $line != "**" ]; then
+                 if [ ! -f "deploy/overlays/staging/$line/image.yaml" ]; then
                     echo "deploy/overlays/staging/${line}/image.yaml doesn't exists."
                     break
                  fi
