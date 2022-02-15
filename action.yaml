@@ -28,7 +28,7 @@ runs:
         if [[ -n "$UPDATE-DEPLOYMENT-LIST" ]]; then
             echo "In IF"
             while IFS= read -r line; do
-              echo "In Loop"
+              echo "In Loop ${line}"
               if [[ -n "$line" ]]; then
                 echo "Update folder: ${line}/**/image.yaml"
               fi
