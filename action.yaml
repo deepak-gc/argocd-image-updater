@@ -33,7 +33,7 @@ runs:
               if [[ -n "$line" ]]; then
                 echo "Update folder: ${line}/**/image.yaml"
               fi
-            done <<< "update-deployment-list.env"
+            done <<< "$UPDATE-DEPLOYMENT-LIST"
         fi
 
         echo "Done"
