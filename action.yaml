@@ -8,7 +8,7 @@ inputs:
   update-deployment-list:
     description: 'List of deployment where image tag should be updated'
     default: |
-      deploy/overlays/staging
+      **
     required: false
 outputs:
   image-tag:
@@ -26,17 +26,13 @@ runs:
       run: |
         
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
-            echo "Adding UPDATE_DEPLOYMENT_LIST to file: $UPDATE_DEPLOYMENT_LIST"
-            echo "$UPDATE_DEPLOYMENT_LIST" > update-deployment-list.env
             while IFS= read -r line; do
-              echo "In Loop ${line}"
               if [[ -n "$line" ]]; then
-                echo "Update folder: ${line}/**/image.yaml"
+                echo "Update folder: deploy/overlays/staging/${line}/image.yaml"
+                sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
-
-        echo "Done"
       
       shell: bash
       
