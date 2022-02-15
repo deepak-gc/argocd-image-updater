@@ -28,9 +28,12 @@ runs:
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
             while IFS= read -r line; do
               if [[ -n "$line" ]]; then
+                  if [ -f "deploy/overlays/staging/$line/image.yaml" ]; then
+                    echo "deploy/overlays/staging/${line}/image.yaml exists."
+                  fi
                 echo "Update folder: deploy/overlays/staging/${line}/image.yaml"
                 sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
-                cat deploy/overlays/staging/${line}/image.yaml
+                cat deploy/overlays/staging/${line}/image.yaml | grep "image:"
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
