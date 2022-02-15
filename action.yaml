@@ -1,25 +1,20 @@
-name: 'Update image tag'
-description: 'Update image tag'
+name: 'ArgoCD staging auto deployment - Image tag updater'
+description: 'Action to update image TAG in all deploy/overlays/staging/**/image.yaml e.g. gcr.io/platform-abc/consumer:TAG'
 inputs:
   image-tag:
     description: 'Image tag'
     default: ${{ github.sha }}
     required: false
   update-deployment-list:
-    description: 'List of deployment where image tag should be updated'
+    description: 'List of deployments where image tag should be updated, by default `**` to udpate all deployments'
     default: |
       **
     required: false
-outputs:
-  image-tag:
-    description: 'Image tag'
-    value: ${{ steps.image-metadata.outputs.image-tag }}
-
+    
 runs:
   using: 'composite'
   steps:
-    - id: image-metadata
-      name: Extract image metadata
+    - name: Update image tag
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
@@ -28,8 +23,9 @@ runs:
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
             while IFS= read -r line; do
               if [[ -n "$line" ]]; then
-                  if [ -f "deploy/overlays/staging/$line/image.yaml" ]; then
-                    echo "deploy/overlays/staging/${line}/image.yaml exists."
+                  if [ ! -f "deploy/overlays/staging/$line/image.yaml" ] && [ $line != "**" ]; then
+                    echo "deploy/overlays/staging/${line}/image.yaml doesn't exists."
+                    break
                   fi
                 echo "Update folder: deploy/overlays/staging/${line}/image.yaml"
                 sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
@@ -37,6 +33,5 @@ runs:
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
-      
       shell: bash
       
