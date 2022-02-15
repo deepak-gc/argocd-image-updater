@@ -21,19 +21,19 @@ runs:
     - id: image-metadata
       name: Extract image metadata
       env:
-        UPDATE-DEPLOYMENT-LIST: ${{ inputs.update-deployment-list }}
+        UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
       run: |
         
-        if [[ -n "$UPDATE-DEPLOYMENT-LIST" ]]; then
-            echo "Adding UPDATE-DEPLOYMENT-LIST to file: $UPDATE-DEPLOYMENT-LIST"
-            echo "$UPDATE-DEPLOYMENT-LIST" > update-deployment-list.env
+        if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
+            echo "Adding UPDATE_DEPLOYMENT_LIST to file: $UPDATE_DEPLOYMENT_LIST"
+            echo "$UPDATE_DEPLOYMENT_LIST" > update-deployment-list.env
             while IFS= read -r line; do
               echo "In Loop ${line}"
               if [[ -n "$line" ]]; then
                 echo "Update folder: ${line}/**/image.yaml"
               fi
-            done <<< "$UPDATE-DEPLOYMENT-LIST"
+            done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
 
         echo "Done"
