@@ -1,4 +1,4 @@
-name: 'ArgoCD staging auto deployment - Image tag updater'
+name: 'Image tag updater - ArgoCD staging auto deployment'
 description: 'Action to update image TAG in all deploy/overlays/staging/**/image.yaml e.g. gcr.io/platform-abc/consumer:TAG'
 inputs:
   image-tag:
