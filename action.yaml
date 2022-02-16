@@ -19,7 +19,6 @@ runs:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
       run: |
-        
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
             while IFS= read -r line; do
               if [[ -n "$line" ]]; then 
