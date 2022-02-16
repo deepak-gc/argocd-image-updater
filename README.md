@@ -18,7 +18,7 @@ Will update image TAG for all staging deployments
   uses: 'deepak-gc/argocd-image-updater@v1'
 ```
 
-Will update image TAG for listed deployments
+Will update image TAG for `deployment-folder-name-1` & `deployment-folder-name-2`
 ```yaml
 - name: Staging Auto deployment
   uses: 'deepak-gc/argocd-image-updater@v1'
