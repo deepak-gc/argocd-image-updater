@@ -31,7 +31,8 @@ runs:
                if [ "$line" != "**" ] && [ ! -f "$IMAGE_FILE" ]; then
                   echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
                   continue
-               fi  
+               fi
+              cat $IMAGE_FILE | grep "image:" 
               echo "Updating $IMAGE_FILE"
               sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
               cat $IMAGE_FILE | grep "image:"
