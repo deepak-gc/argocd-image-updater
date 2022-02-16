@@ -29,7 +29,7 @@ runs:
                     continue
                  fi  
                 echo "Updating $IMAGE_FILE"
-                sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" $IMAGE_FILE
+                sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
                 cat $IMAGE_FILE | grep "image:"
                 echo " "
                 echo "UPDATED_TAG=true" >> $GITHUB_ENV
