@@ -32,9 +32,13 @@ runs:
                   echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
                   continue
                fi
-              cat $IMAGE_FILE | grep "image:" 
               echo "Updating $IMAGE_FILE"
+              echo "Previous TAG:"
+              cat $IMAGE_FILE | grep "image:" 
+              
               sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
+
+              echo "New TAG:"
               cat $IMAGE_FILE | grep "image:"
               echo " "
             fi            
