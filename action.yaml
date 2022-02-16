@@ -28,7 +28,7 @@ runs:
                     continue
                  fi  
                 echo "Updating deploy/overlays/staging/${line}/image.yaml"
-                sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
+                sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" deploy/overlays/staging/${line}/image.yaml
                 cat deploy/overlays/staging/${line}/image.yaml | grep "image:"
                 echo " "
                 echo "UPDATED_TAG=true" >> $GITHUB_ENV
@@ -41,6 +41,6 @@ runs:
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
-        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{github.sha}}'"
+        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{env.IMAGE_TAG}}'"
         git push 
       shell: bash   
