@@ -10,7 +10,10 @@ inputs:
     default: |
       **
     required: false
-    
+  deployment-path: 
+    description: 'List of deployments where image tag should be updated, by default `**` to udpate all deployments'
+    required: true
+    default: "./deploy/overlays/staging"
 runs:
   using: 'composite'
   steps:
@@ -18,12 +21,13 @@ runs:
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
+        DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
         UPDATED_TAG: false
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
           while IFS= read -r line; do
             if [[ -n "$line" ]]; then 
-               IMAGE_FILE="deploy/overlays/staging/$line/image.yaml"   
+               IMAGE_FILE="$DEPLOYMENT_PATH/$line/image.yaml"   
                if [ "$line" != "**" ] && [ ! -f "$IMAGE_FILE" ]; then
                   echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
                   continue
