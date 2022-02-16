@@ -13,7 +13,7 @@ inputs:
   deployment-path: 
     description: 'List of deployments where image tag should be updated, by default `**` to udpate all deployments'
     required: true
-    default: "./deploy/overlays/staging"
+    default: "deploy/overlays/staging"
   gcr-platform:
     description: 'GCR platform name e.g. platform-staging, platform-production'
     required: true
