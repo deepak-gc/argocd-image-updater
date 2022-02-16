@@ -21,24 +21,29 @@ runs:
         UPDATED_TAG: false
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
-            while IFS= read -r line; do
-              if [[ -n "$line" ]]; then 
-                 IMAGE_FILE="deploy/overlays/staging/$line/image.yaml"   
-                 if [ "$line" != "**" ] && [ ! -f "$IMAGE_FILE" ]; then
-                    echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
-                    continue
-                 fi  
-                echo "Updating $IMAGE_FILE"
-                sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
-                cat $IMAGE_FILE | grep "image:"
-                echo " "
-                echo "UPDATED_TAG=true" >> $GITHUB_ENV
-              fi
-            done <<< "$UPDATE_DEPLOYMENT_LIST"
+          while IFS= read -r line; do
+            if [[ -n "$line" ]]; then 
+               IMAGE_FILE="deploy/overlays/staging/$line/image.yaml"   
+               if [ "$line" != "**" ] && [ ! -f "$IMAGE_FILE" ]; then
+                  echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
+                  continue
+               fi  
+              echo "Updating $IMAGE_FILE"
+              sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
+              cat $IMAGE_FILE | grep "image:"
+              echo " "
+            fi            
+          done <<< "$UPDATE_DEPLOYMENT_LIST"
+            
+          if [[ ! -z $(git status -s) ]]   
+            echo "Some changes"
+            echo "UPDATED_TAG=true" >> $GITHUB_ENV
+          fi
+    
         fi
       shell: bash
     - name: Commit image update changes
-      if: env.UPDATED_TAG
+      if: env.UPDATED_TAG 
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
