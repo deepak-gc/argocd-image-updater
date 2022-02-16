@@ -36,8 +36,9 @@ runs:
           done <<< "$UPDATE_DEPLOYMENT_LIST"
             
           if [[ ! -z $(git status -s) ]]; then   
-            echo "Some changes"
             echo "UPDATED_TAG=true" >> $GITHUB_ENV
+          else
+            echo "There was no change in image tag"
           fi
     
         fi
