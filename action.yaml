@@ -23,7 +23,7 @@ runs:
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
             while IFS= read -r line; do
               if [[ -n "$line" ]]; then 
-                 IMAGE_FILE = "deploy/overlays/staging/$line/image.yaml"   
+                 IMAGE_FILE="deploy/overlays/staging/$line/image.yaml"   
                  if [ "$line" != "**" ] && [ ! -f "$IMAGE_FILE" ]; then
                     echo "Error: Failed to update $IMAGE_FILE, file doesn't exists."
                     continue
