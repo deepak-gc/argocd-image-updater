@@ -18,6 +18,7 @@ runs:
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
+        UPDATED_TAG: false
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
             while IFS= read -r line; do
@@ -30,8 +31,16 @@ runs:
                 sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
                 cat deploy/overlays/staging/${line}/image.yaml | grep "image:"
                 echo " "
+                echo "UPDATED_TAG=true" >> $GITHUB_ENV
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
       shell: bash
-      
+    - name: Commit image update changes
+      if: ${ env.UPDATED_TAG }
+      run: |
+        git config --global user.name 'argocd-image-updater'
+        git config --global user.email 'argocd-image-updater@users.noreply.github.com'
+        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{github.sha}}'"
+        git push 
+      shell: bash   
