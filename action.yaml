@@ -33,7 +33,7 @@ runs:
                 sed -ri "s~image: (.*):(.*)~image: \1:${{github.sha}}~g" deploy/overlays/staging/${line}/image.yaml
                 cat deploy/overlays/staging/${line}/image.yaml | grep "image:"
                 
-                echo "\n"
+                echo " "
               fi
             done <<< "$UPDATE_DEPLOYMENT_LIST"
         fi
