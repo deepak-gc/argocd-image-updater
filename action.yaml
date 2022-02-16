@@ -41,8 +41,7 @@ runs:
               echo "Previous TAG:"
               cat $IMAGE_FILE | grep "image:" 
               
-              sed -ri "s~image: gcr.io/platform-staging-200307/(.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
-              (gcr.io/project/.*)
+              sed -ri "s~image: (${{env.GCR_PLATFORM}}.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
 
               echo "New TAG:"
               cat $IMAGE_FILE | grep "image:"
