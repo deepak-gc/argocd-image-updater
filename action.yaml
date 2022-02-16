@@ -14,6 +14,10 @@ inputs:
     description: 'List of deployments where image tag should be updated, by default `**` to udpate all deployments'
     required: true
     default: "./deploy/overlays/staging"
+  gcr-platform:
+    description: 'GCR platform name e.g. platform-staging, platform-production'
+    required: true
+    default: 'gcr.io/platform-staging-200307/'
 runs:
   using: 'composite'
   steps:
@@ -22,6 +26,7 @@ runs:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
         DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
+        GCR_PLATFORM: ${{ inputs.gcr-platform }}
         UPDATED_TAG: false
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
@@ -36,7 +41,9 @@ runs:
               echo "Previous TAG:"
               cat $IMAGE_FILE | grep "image:" 
               
-              sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
+              #sed -ri "s~image: (.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
+              sed -ri "s~image: ($GCR_PLATFORM.*):(.*)~image: \1:${{env.IMAGE_TAG}}~g" "$IMAGE_FILE"
+              (gcr.io/project/.*)
 
               echo "New TAG:"
               cat $IMAGE_FILE | grep "image:"
