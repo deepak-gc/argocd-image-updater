@@ -49,8 +49,6 @@ runs:
             fi            
           done <<< "$UPDATE_DEPLOYMENT_LIST"
           
-          git status -s
-          
           if [[ ! -z $(git status -s) ]]; then   
             echo "UPDATED_TAG=true" >> $GITHUB_ENV
           else
