@@ -18,16 +18,14 @@ inputs:
     description: 'GCR platform name e.g. platform-staging, platform-production'
     required: false
     default: 'gcr.io/platform-staging-200307/'
-
-env:
-  UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
-  IMAGE_TAG: ${{ inputs.image-tag }}
-  DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
-  GCR_PLATFORM: ${{ inputs.gcr-platform }}
-  UPDATED_TAG: false
-
 runs:
   using: 'composite'
+  env:
+    UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
+    IMAGE_TAG: ${{ inputs.image-tag }}
+    DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
+    GCR_PLATFORM: ${{ inputs.gcr-platform }}
+    UPDATED_TAG: false
   steps:
     - name: Update image tag
       run: |
