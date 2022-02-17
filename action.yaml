@@ -20,14 +20,14 @@ inputs:
     default: 'gcr.io/platform-staging-200307/'
 runs:
   using: 'composite'
-  env:
-    UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
-    IMAGE_TAG: ${{ inputs.image-tag }}
-    DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
-    GCR_PLATFORM: ${{ inputs.gcr-platform }}
-    UPDATED_TAG: false
   steps:
     - name: Update image tag
+      env:
+        UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
+        IMAGE_TAG: ${{ inputs.image-tag }}
+        DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
+        GCR_PLATFORM: ${{ inputs.gcr-platform }}
+        UPDATED_TAG: false
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
           while IFS= read -r line; do
@@ -62,6 +62,6 @@ runs:
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
-        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{env.IMAGE_TAG}}'"
+        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{ inputs.image-tag }}'"
         git push 
       shell: bash   
