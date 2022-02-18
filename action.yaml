@@ -18,9 +18,9 @@ inputs:
     description: 'GCR platform name e.g. platform-staging, platform-production'
     required: false
     default: 'gcr.io/platform-staging-200307/'
-  token:
-    description: Gihub token with permission to write in protective branches
-    required: true
+#  token:
+#    description: Gihub token with permission to write in protective branches
+#    required: true
 runs:
   using: 'composite'
   steps:
@@ -64,13 +64,8 @@ runs:
     - name: Commit image update changes
       if: env.UPDATED_TAG == 'true' && contains(github.event.head_commit.message, 'automatic update of argocd deployment') == false
       run: |
-        mv .git/config .git/config.temp
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
-        git remote add origin https://github.com/${{ github.repository }}
-        git config --global push.default current
-        git remote set-url origin https://x-access-token:${{ inputs.token }}@github.com/${{ github.repository }}
         git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{ inputs.image-tag }}'"
         git push
-        mv .git/config.temp .git/config
       shell: bash   
