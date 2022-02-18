@@ -58,9 +58,9 @@ runs:
         fi
       shell: bash
     - name: Commit image update changes
-      if: env.UPDATED_TAG 
       env:
         ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
+      if: env.UPDATED_TAG 
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
