@@ -59,10 +59,12 @@ runs:
       shell: bash
     - name: Commit image update changes
       if: env.UPDATED_TAG 
+      env:
+        ARGOCD_GITHUB_TOKEN: ${{ secrets.ARGOCD_GITHUB_TOKEN }}
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
-        git remote set-url origin https://x-access-token:${{ secrets.ARGOCD_GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git remote set-url origin https://x-access-token:$ARGOCD_GITHUB_TOKEN@github.com/${{ github.repository }}
         git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{ inputs.image-tag }}'"
         git push 
       shell: bash   
