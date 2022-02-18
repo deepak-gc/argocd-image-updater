@@ -64,7 +64,6 @@ runs:
     - name: Commit image update changes
       if: env.UPDATED_TAG == 'true' && contains(github.event.head_commit.message, 'automatic update of argocd deployment') == false
       run: |
-        echo ${{env.UPDATED_TAG}}
         mv .git/config .git/config.temp
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
