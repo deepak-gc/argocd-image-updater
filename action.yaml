@@ -66,6 +66,6 @@ runs:
       run: |
         git config --global user.name 'argocd-image-updater'
         git config --global user.email 'argocd-image-updater@users.noreply.github.com'
-        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{ inputs.image-tag }}'"
+        git commit -am "build: automatic update of argocd deployment - [skip ci]" -m "updated image tag to '${{ inputs.image-tag }}'"
         git push
       shell: bash   
