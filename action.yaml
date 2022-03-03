@@ -22,15 +22,15 @@ inputs:
     description: 'GiHub token with permission to write in protective branches'
     required: true
   branch-name:
-    description: Braach name
+    description: Branch name
     required: false
-    default: 'refs/heads/dev refs/heads/staging refs/heads/master refs/heads/main'
+    default: 'dev'
 runs:
   using: 'composite'
   steps:
     - name: Update image tag
       #${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', github.event.inputs.branch-name), github.ref) }}
-      if: contains(env.BRANCH_NAME, github.ref)
+      if: contains('refs/heads/staging refs/heads/master refs/heads/main', github.ref) || contains(format('refs/heads/{0}', env.BRANCH_NAME), github.ref)
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
