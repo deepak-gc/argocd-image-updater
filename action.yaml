@@ -33,7 +33,7 @@ runs:
       run: |
         BRANCH_NAME="${{ inputs.branch-name }}"
         if [[ $BRANCH_NAME != "dev" || $BRANCH_NAME != "staging" || $BRANCH_NAME != "master" || $BRANCH_NAME != "main" ]]; then
-          echo -s '\nInvalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild:[ staging | dev | master | main ]\n'
+          echo '\nInvalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild:[ staging | dev | master | main ]\n'
           exit 1
         fi
       shell: bash
