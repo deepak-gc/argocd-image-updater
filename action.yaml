@@ -31,7 +31,7 @@ runs:
     - name: Validate data
       run: |
         BRANCH_NAME="${{ inputs.branch-name }}"
-        UPDATED_TAG=true
+        UPDATE_ERROR=false
         if [[ "$BRANCH_NAME" != "dev" && "$BRANCH_NAME" != "staging" && "$BRANCH_NAME" != "master" && "$BRANCH_NAME" != "main" ]]; then
           printf "\n **Auto deployment failed** \n Invalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild: [ staging | dev | master | main ]\n\n"
           exit 1
@@ -40,13 +40,13 @@ runs:
         REF_NAME="$(echo ${GITHUB_REF#refs/*/})"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
           printf "\n Auto deployment will not continute as it's cofigured to run only for *$BRANCH_NAME* branch, current branch is *$REF_NAME* \n"
-          UPDATED_TAG=false
+          UPDATE_ERROR=true
           exit 0
         fi
-        echo "UPDATED_TAG=$UPDATED_TAG" >> $GITHUB_ENV
+        echo "UPDATE_ERROR=$UPDATE_ERROR" >> $GITHUB_ENV
       shell: bash
     - name: Update image tag
-      if: env.UPDATED_TAG == 'true'
+      if: env.UPDATE_ERROR == 'false'
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
@@ -98,7 +98,7 @@ runs:
         mv .git/config.temp .git/config
       shell: bash
     - name: Staging Tests
-      if: ${{ (env.UPDATED_TAG == 'true') && success() }}
+      if: ${{ (env.UPDATE_ERROR == 'false') && success() }}
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
@@ -112,7 +112,7 @@ runs:
         }'
       shell: bash
     - name: Staging Tests
-      if: ${{ (env.UPDATED_TAG == 'true') && failure() }}
+      if: ${{ (env.UPDATE_ERROR == 'false') && failure() }}
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
