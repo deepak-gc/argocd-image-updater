@@ -28,7 +28,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - id: Validate data
+    - id: validate_data
       run: |
         BRANCH_NAME="${{ inputs.branch-name }}"
         UPDATE_ERROR=false
