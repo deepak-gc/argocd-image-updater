@@ -32,13 +32,10 @@ runs:
     - name: Validate data
       run: |
         BRANCH_NAME="${{ inputs.branch-name }}"
-        BRANCH_NAME="${BRANCH_NAME//[[:blank:]]/}"
-        echo "-$BRANCH_NAME-"
-
-        if [[ -z "$BRANCH_NAME" ]]; then
-          echo "Branch name is empty"
+        if [[ $BRANCH_NAME != "dev" || $BRANCH_NAME != "staging" || $BRANCH_NAME != "master" || $BRANCH_NAME != "main" ]]; then
+          echo "Invalid branch name: $BRANCH_NAME /n Only one of the following branches are vaild:[ staging | dev | master | main ]"
+          exit 0
         fi
-        echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
       shell: bash
     - name: Update image tag
       #${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', github.event.inputs.branch-name), github.ref) }}
@@ -49,7 +46,7 @@ runs:
         DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
         GCR_PLATFORM: ${{ inputs.gcr-platform }}
         UPDATED_TAG: false
-        BRANCH_NAME: ${{ env.BRANCH_NAME }}
+        BRANCH_NAME: ${{ inputs.branch-name }}
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
           while IFS= read -r line; do
