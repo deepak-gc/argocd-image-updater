@@ -22,6 +22,7 @@ inputs:
     description: 'GiHub token with permission to write in protective branches'
     required: true
 runs:
+  pre-if: contains('refs/heads/dev', github.ref)
   using: 'composite'
   steps:
     - name: Update image tag
@@ -78,11 +79,11 @@ runs:
       if: ${{ success() }}
       run: |
         curl --request POST \
-        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
         --header 'authorization: Bearer ${{ inputs.token }}' \
         --header 'content-type: application/json' \
         --data '{
-          "context": "ArgoCD image updater test",
+          "context": "ArgoCD image updated",
           "state": "success",
           "description": "ArgoCD image updater passed",
           "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -92,11 +93,11 @@ runs:
       if: ${{ failure() }}
       run: |
         curl --request POST \
-        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
         --header 'authorization: Bearer ${{ inputs.token }}' \
         --header 'content-type: application/json' \
         --data '{
-          "context": "ArgoCD image updater test",
+          "context": "ArgoCD image updater failed",
           "state": "failure",
           "description": "ArgoCD image updater failed",
           "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
