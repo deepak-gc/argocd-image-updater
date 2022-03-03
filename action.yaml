@@ -30,13 +30,14 @@ runs:
   steps:
     - name: Update image tag
       #${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', github.event.inputs.branch-name), github.ref) }}
-      if: contains(github.event.inputs.branch-name, github.ref)
+      if: contains(env.BRANCH_NAME, github.ref)
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
         DEPLOYMENT_PATH: ${{ inputs.deployment-path }}
         GCR_PLATFORM: ${{ inputs.gcr-platform }}
         UPDATED_TAG: false
+        BRANCH_NAME: ${{ inputs.branch-name }}
       run: |
         if [[ -n "$UPDATE_DEPLOYMENT_LIST" ]]; then
           while IFS= read -r line; do
