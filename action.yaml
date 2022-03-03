@@ -25,7 +25,7 @@ runs:
   using: 'composite'
   steps:
     - name: Update image tag
-      if: contains('refs/heads/dev', github.ref)
+      if: contains('refs/heads/dev refs/heads/staging refs/heads/master refs/heads/main', github.ref)
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
@@ -75,7 +75,7 @@ runs:
         echo "COMMIT_ID=$(git rev-parse --verify HEAD)" >> $GITHUB_ENV
         mv .git/config.temp .git/config
       shell: bash
-    - name: Staging Tests 
+    - name: Staging Tests
       if: ${{ success() }}
       run: |
         curl --request POST \
