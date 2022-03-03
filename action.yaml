@@ -34,7 +34,7 @@ runs:
         BRANCH_NAME="${{ inputs.branch-name }}"
         if [[ $BRANCH_NAME != "dev" || $BRANCH_NAME != "staging" || $BRANCH_NAME != "master" || $BRANCH_NAME != "main" ]]; then
           echo "Invalid branch name: $BRANCH_NAME /n Only one of the following branches are vaild:[ staging | dev | master | main ]"
-          exit 0
+          exit 1
         fi
       shell: bash
     - name: Update image tag
