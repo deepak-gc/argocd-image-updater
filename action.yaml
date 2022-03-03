@@ -25,14 +25,17 @@ inputs:
     description: Branch name
     required: false
     default: 'dev'
+#if [[ -z "${BRANCH_NAME// }" ]]; then
 runs:
   using: 'composite'
   steps:
     - name: Validate data
       run: |
         BRANCH_NAME=${{ inputs.branch-name }}
+        BRANCH_NAME=${BRANCH_NAME//[[:blank:]]/}
+        echo "-$BRANCH_NAME-"
 
-        if [[ -z "${BRANCH_NAME// }" ]]; then
+        if [[ -z "$BRANCH_NAME" ]]; then
           echo "Branch name is empty"
           BRANCH_NAME="dev"
         fi
