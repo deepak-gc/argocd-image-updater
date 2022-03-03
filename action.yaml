@@ -22,10 +22,10 @@ inputs:
     description: 'GiHub token with permission to write in protective branches'
     required: true
 runs:
-  pre-if: contains('refs/heads/dev', github.ref)
   using: 'composite'
   steps:
     - name: Update image tag
+      if: contains('refs/heads/dev', github.ref)
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
@@ -75,7 +75,7 @@ runs:
         echo "COMMIT_ID=$(git rev-parse --verify HEAD)" >> $GITHUB_ENV
         mv .git/config.temp .git/config
       shell: bash
-    - name: Staging Tests
+    - name: Staging Tests 
       if: ${{ success() }}
       run: |
         curl --request POST \
