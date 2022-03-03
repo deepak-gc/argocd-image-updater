@@ -30,21 +30,24 @@ runs:
   steps:
     - name: Validate data
       run: |
+        UPDATED_TAG=true
         BRANCH_NAME="${{ inputs.branch-name }}"
         if [[ "$BRANCH_NAME" != "dev" && "$BRANCH_NAME" != "staging" && "$BRANCH_NAME" != "master" && "$BRANCH_NAME" != "main" ]]; then
           printf "\n **Auto deployment failed** \n Invalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild: [ staging | dev | master | main ]\n\n"
-          exit 1
+          UPDATED_TAG=false
+          exit 0
         fi
 
         REF_NAME="$(echo ${GITHUB_REF#refs/*/})"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
           printf "\n Auto deployment will not run as the selected branch `$BRANCH_NAME` is not same as current branch `$REF_NAME` \n"
+          UPDATED_TAG=false
           exit 0
         fi
+        echo "UPDATED_TAG=$UPDATED_TAG" >> $GITHUB_ENV
       shell: bash
     - name: Update image tag
-      #${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', github.event.inputs.branch-name), github.ref) }}
-      if: (env.BRANCH_NAME != '') && (contains('refs/heads/staging refs/heads/master refs/heads/main', github.ref) || contains(format('refs/heads/{0}', env.BRANCH_NAME), github.ref))
+      if: env.UPDATED_TAG == 'true'
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
@@ -96,7 +99,7 @@ runs:
         mv .git/config.temp .git/config
       shell: bash
     - name: Staging Tests
-      if: ${{ success() }}
+      if: ${{ (env.UPDATED_TAG == 'true') && success() }}
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
@@ -110,7 +113,7 @@ runs:
         }'
       shell: bash
     - name: Staging Tests
-      if: ${{ failure() }}
+      if: ${{ (env.UPDATED_TAG == 'true') && failure() }}
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ env.COMMIT_ID }} \
