@@ -40,7 +40,7 @@ runs:
 
         REF_NAME="$(echo ${GITHUB_REF#refs/*/})"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
-          printf "\n Auto deployment will not run as the selected branch `$BRANCH_NAME` is not same as current branch `$REF_NAME` \n"
+          printf "\n Auto deployment will not run as the selected branch $BRANCH_NAME is not same as current branch $REF_NAME \n"
           UPDATED_TAG=false
           exit 0
         fi
