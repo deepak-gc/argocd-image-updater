@@ -29,7 +29,7 @@ runs:
   using: 'composite'
   steps:
     - name: Update image tag
-      if: contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', inputs.branch-name,github.ref))
+      if: ${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', inputs.branch-name,github.ref)) }}
       env:
         UPDATE_DEPLOYMENT_LIST: ${{ inputs.update-deployment-list }}
         IMAGE_TAG: ${{ inputs.image-tag }}
