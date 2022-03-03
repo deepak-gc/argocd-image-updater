@@ -37,7 +37,6 @@ runs:
 
         if [[ -z "$BRANCH_NAME" ]]; then
           echo "Branch name is empty"
-          BRANCH_NAME="dev"
         fi
         echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
       shell: bash
