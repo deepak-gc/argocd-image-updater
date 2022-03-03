@@ -28,9 +28,8 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Validate data
+    - id: Validate data
       run: |
-        "Validate data"
         BRANCH_NAME="${{ inputs.branch-name }}"
         UPDATE_ERROR=false
         if [[ "$BRANCH_NAME" != "dev" && "$BRANCH_NAME" != "staging" && "$BRANCH_NAME" != "master" && "$BRANCH_NAME" != "main" ]]; then
