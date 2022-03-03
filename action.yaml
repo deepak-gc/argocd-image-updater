@@ -36,6 +36,12 @@ runs:
           printf "\n **Auto deployment failed** \n Invalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild: [ staging | dev | master | main ]\n\n"
           exit 1
         fi
+
+        REF_NAME=$(echo ${GITHUB_REF#refs/*/})
+        if [[ $BRANCH_NAME != $REF_NAME ]]
+          printf "\n Auto deployment will not run as the selected branch `$BRANCH_NAME` is not same as current branch `$REF_NAME` \n"
+          exit 0
+        fi
       shell: bash
     - name: Update image tag
       #${{ contains(github.event.inputs.branch-name, github.ref) || contains(format('refs/heads/{0}', github.event.inputs.branch-name), github.ref) }}
