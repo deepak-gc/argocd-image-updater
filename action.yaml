@@ -31,8 +31,8 @@ runs:
   steps:
     - name: Validate data
       run: |
-        BRANCH_NAME=${{ inputs.branch-name }}
-        BRANCH_NAME=${BRANCH_NAME//[[:blank:]]/}
+        BRANCH_NAME="${{ inputs.branch-name }}"
+        BRANCH_NAME="${BRANCH_NAME//[[:blank:]]/}"
         echo "-$BRANCH_NAME-"
 
         if [[ -z "$BRANCH_NAME" ]]; then
