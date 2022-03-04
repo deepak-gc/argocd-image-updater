@@ -37,7 +37,7 @@ runs:
           exit 1
         fi
 
-        REF_NAME=(echo ${{ github.ref_name}} sed -e 's/^v//' | tr -c '[[:alnum:]]._-' '_')
+        REF_NAME=(echo ${{ github.ref_name}} | sed -e 's/^v//' | tr -c '[[:alnum:]]._-' '_')
         echo $REF_NAME
 
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
