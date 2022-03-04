@@ -28,7 +28,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - id: validate_data
+    - name: Validate
       run: |
         BRANCH_NAME="${{ inputs.branch-name }}"
         UPDATE_ERROR=false
@@ -97,7 +97,7 @@ runs:
         echo "COMMIT_ID=$(git rev-parse --verify HEAD)" >> $GITHUB_ENV
         mv .git/config.temp .git/config
       shell: bash
-    - name: Staging Tests
+    - name: Commit status success
       if: ${{ (env.UPDATE_ERROR == 'false') && success() }}
       run: |
         curl --request POST \
@@ -111,7 +111,7 @@ runs:
           "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         }'
       shell: bash
-    - name: Staging Tests
+    - name: Commit status failure
       if: ${{ (env.UPDATE_ERROR == 'false') && failure() }}
       run: |
         curl --request POST \
