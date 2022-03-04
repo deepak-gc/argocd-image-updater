@@ -109,7 +109,7 @@ runs:
           "state": "success",
           "description": "ArgoCD image updater passed",
           "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        }'
+        }' &> /dev/null
       shell: bash
     - name: Commit status failure
       if: ${{ (env.UPDATE_ERROR == 'false') && failure() }}
@@ -123,5 +123,5 @@ runs:
           "state": "failure",
           "description": "ArgoCD image updater failed",
           "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        }'
+        }' &> /dev/null
       shell: bash
