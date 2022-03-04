@@ -37,6 +37,8 @@ runs:
           exit 1
         fi
 
+        echo ${{ github.ref_name }}
+
         REF_NAME="$(echo ${GITHUB_REF#refs/*/})"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
           printf "\n Auto deployment will not run for current '$REF_NAME' branch as it's cofigured to run for '$BRANCH_NAME' branch only.\n"
