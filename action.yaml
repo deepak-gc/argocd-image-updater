@@ -39,7 +39,7 @@ runs:
 
         REF_NAME="$(echo ${GITHUB_REF#refs/*/})"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
-          printf "\n Auto deployment will not run for current '$REF_NAME' branch as it's cofigured to run only for '$BRANCH_NAME' branch.\n"
+          printf "\n Auto deployment will not run for current '$REF_NAME' branch as it's cofigured to run for '$BRANCH_NAME' branch only.\n"
           UPDATE_ERROR=true
           exit 0
         fi
