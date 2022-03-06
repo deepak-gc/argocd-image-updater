@@ -92,7 +92,7 @@ runs:
         git remote add origin https://github.com/${{ github.repository }}
         git config --global push.default current
         git remote set-url origin https://${{ inputs.token }}@github.com/${{ github.repository }}
-        git commit -am "build: automatic update of argocd deployment [skip ci]" -m "updated image tag to '${{ inputs.image-tag }}'"
+        git commit -am "build: automatic update of argocd deployment" -m "updated image tag to '${{ inputs.image-tag }}' [skip ci]"
         git push
         echo "COMMIT_ID=$(git rev-parse --verify HEAD)" >> $GITHUB_ENV
         mv .git/config.temp .git/config
