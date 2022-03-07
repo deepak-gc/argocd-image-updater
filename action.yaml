@@ -39,7 +39,7 @@ runs:
 
         REF_NAME="${{ github.ref_name}}"
         if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
-          printf "\n Auto deployment will not run for current '$REF_NAME' branch as it's cofigured to run for '$BRANCH_NAME' branch only.\n"
+          printf "\n Auto deployment will not run for current '$REF_NAME' branch/tag as it's cofigured to run for '$BRANCH_NAME' branch only.\n"
           UPDATE_ERROR=true
           exit 0
         fi
