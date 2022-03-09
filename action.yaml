@@ -21,25 +21,15 @@ inputs:
   token:
     description: 'GiHub token with permission to write in protective branches'
     required: true
-  branch-name:
-    description: 'Name of the branch for which this workflow will run, valid values are: dev | staging | main | master'
-    required: false
-    default: 'dev'
 runs:
   using: 'composite'
   steps:
     - name: Validate
       run: |
-        BRANCH_NAME="${{ inputs.branch-name }}"
         UPDATE_ERROR=false
-        if [[ "$BRANCH_NAME" != "dev" && "$BRANCH_NAME" != "staging" && "$BRANCH_NAME" != "master" && "$BRANCH_NAME" != "main" ]]; then
-          printf "\n **Auto deployment failed** \n Invalid branch name: $BRANCH_NAME \n Only one of the following branches are vaild: [ staging | dev | master | main ]\n\n"
-          exit 1
-        fi
-
         REF_NAME="${{ github.ref_name}}"
-        if [[ "$BRANCH_NAME" != "$REF_NAME" ]]; then
-          printf "\n Auto deployment will not run for current '$REF_NAME' branch/tag as it's cofigured to run for '$BRANCH_NAME' branch only.\n"
+        if [[ "$REF_NAME" != "dev" && "$REF_NAME" != "staging" && "$REF_NAME" != "master" && "$REF_NAME" != "main" ]]; then
+          printf "\n **Auto deployment can run only for one of these brnahces: [ staging | dev | master | main ]\n\n"
           UPDATE_ERROR=true
           exit 0
         fi
