@@ -29,7 +29,7 @@ runs:
         UPDATE_ERROR=false
         REF_NAME="${{ github.ref_name}}"
         if [[ "$REF_NAME" != "dev" && "$REF_NAME" != "staging" && "$REF_NAME" != "master" && "$REF_NAME" != "main" ]]; then
-          printf "\n **Auto deployment can run only for one of these brnahces: [ staging | dev | master | main ]\n\n"
+          printf "\n **Auto deployment did not run, it can only run when changes are merged into one of these brnahces: [ staging | dev | master | main ]\n\n"
           UPDATE_ERROR=true
           exit 0
         fi
